@@ -24,11 +24,17 @@
         .app-container {
             max-width: 360px;
             margin: auto;
-            background: white;
             border-radius: 15px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             padding: 15px;
             margin-bottom: 15px;
+        }
+        .highlighted {
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .less-prominent {
+            background: #e0e0e0;
+            opacity: 0.8;
         }
         h1 {
             font-size: 18px;
@@ -79,7 +85,7 @@
                 : `${hours}:${minutes.toString().padStart(2, '0')} ${ampm}`;
         }
 
-        function updateTimeAndSchedule(schedule, sectionId, title) {
+        function updateTimeAndSchedule(schedule, sectionId, title, isHighlighted) {
             const now = new Date();
             const currentTime = now.getHours() * 60 + now.getMinutes();
             document.getElementById('current-time').innerText = `Current Time: ${formatAMPM(now.getHours(), now.getMinutes(), true)}`;
@@ -93,7 +99,7 @@
                 .slice(0, 3);
 
             const sectionDiv = document.createElement('div');
-            sectionDiv.className = 'app-container';
+            sectionDiv.className = `app-container ${isHighlighted ? 'highlighted' : 'less-prominent'}`;
             sectionDiv.innerHTML = `<h1>${title}</h1>`;
 
             if (upcomingTrains.length > 0) {
@@ -115,8 +121,8 @@
             const container = document.getElementById('container');
             container.innerHTML = '';
             
-            const sectionA = updateTimeAndSchedule(scheduleAtoB, 'AtoB', 'WTC to Harrison (Newark)');
-            const sectionB = updateTimeAndSchedule(scheduleBtoA, 'BtoA', 'Harrison to WTC');
+            const sectionA = updateTimeAndSchedule(scheduleAtoB, 'AtoB', 'WTC to Harrison (Newark)', !isMorning);
+            const sectionB = updateTimeAndSchedule(scheduleBtoA, 'BtoA', 'Harrison to WTC', isMorning);
             
             if (isMorning) {
                 container.appendChild(sectionB);
